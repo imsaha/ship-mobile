@@ -4,6 +4,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackNavigatorParamList } from "./MainStackNavigator";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
+import Colors from "../constraints/Colors";
+import DashboardCard from "../components/DashboardCard";
+import Layout from "../constraints/Layout";
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<MainStackNavigatorParamList, "Home">;
@@ -96,28 +99,35 @@ export default class HomeScreen extends React.Component<
       >
         <View
           style={{
-            height: 100,
-            width: null,
-            backgroundColor: "blue",
-            marginTop: 10,
-            padding: 15,
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
-          <Text
+          <DashboardCard
+            height={100}
+            width={Layout.window.width / 2 - 15}
+            title="Total scan"
+            value={10}
             style={{
-              fontSize: 19,
-              fontWeight: "700",
+              backgroundColor: Colors.totalDelivery,
             }}
-          >
-            Total scan
-          </Text>
-          <Text
+            contentStyle={{
+              color: Colors.white,
+            }}
+          />
+
+          <DashboardCard
+            height={100}
+            width={Layout.window.width / 2 - 15}
+            title="Total success"
+            value={10}
             style={{
-              fontSize: 26,
+              backgroundColor: Colors.deliverySuccess,
             }}
-          >
-            10
-          </Text>
+            contentStyle={{
+              color: Colors.white,
+            }}
+          />
         </View>
 
         <TouchableOpacity

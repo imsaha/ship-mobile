@@ -11,6 +11,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { FlatList } from "react-native-gesture-handler";
+import Colors from "../constraints/Colors";
 
 type ScannerScreenProps = {
   navigation: StackNavigationProp<MainStackNavigatorParamList, "Scanner">;
@@ -37,6 +39,33 @@ export default class ScannerScreen extends React.Component<
       scanCount: 0,
       scanData: [],
     };
+
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            backgroundColor: "white",
+            paddingHorizontal: 13,
+            flexDirection: "row",
+            alignItems: "center",
+            position: "relative",
+          }}
+          onPress={() => {
+            this.setState({ scanned: false });
+          }}
+        >
+          <Ionicons name="md-qr-scanner" size={26} />
+          <Ionicons
+            name="ios-add"
+            size={20}
+            style={{
+              position: "absolute",
+              left: 19,
+            }}
+          />
+        </TouchableOpacity>
+      ),
+    });
   }
 
   async componentDidMount() {
@@ -96,29 +125,99 @@ export default class ScannerScreen extends React.Component<
           />
         )}
 
-        {scanData &&
-          scanData.length > 0 &&
-          scanData.map((data) => (
-            <View>
-              <Text>{data}</Text>
-            </View>
-          ))}
-
-        {scanned && (
-          <TouchableOpacity
+        {scanData && scanData.length > 0 && scanned && (
+          <View
             style={{
-              backgroundColor: "white",
-              padding: 20,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-            onPress={() => {
-              this.setState({ scanned: false });
+              flex: 1,
             }}
           >
-            <Text>{scanCount}</Text>
-            <Text>Scan again</Text>
-          </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={scanData}
+                keyExtractor={(item, index) => `${item}_${index}`}
+                ListHeaderComponent={() => (
+                  <View
+                    style={{
+                      padding: 10,
+                      marginBottom: 5,
+                      // backgroundColor: Colors.white,
+                    }}
+                  >
+                    <Text>Total count {scanCount}</Text>
+                  </View>
+                )}
+                renderItem={({ item }) => (
+                  <View
+                    style={{
+                      padding: 10,
+                      backgroundColor: Colors.white,
+                      marginBottom: 5,
+                      borderBottomWidth: 0.5,
+                      borderBottomColor: Colors.lightGray,
+                    }}
+                  >
+                    <Text>{item}</Text>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={{}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("Deliver");
+                }}
+                activeOpacity={0.8}
+                style={{
+                  backgroundColor: "green",
+                  paddingHorizontal: 10,
+                  paddingVertical: 20,
+                  marginBottom: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    color: "#fff",
+                  }}
+                >
+                  Package delivered
+                </Text>
+
+                <Ionicons
+                  name="md-done-all"
+                  size={24}
+                  style={{
+                    color: "white",
+                  }}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  backgroundColor: "gray",
+                  paddingHorizontal: 10,
+                  paddingVertical: 20,
+                  marginBottom: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                  }}
+                >
+                  Uncessfull delivery
+                </Text>
+                <Ionicons name="md-close" size={24} />
+              </TouchableOpacity>
+            </View>
+          </View>
         )}
       </View>
     );

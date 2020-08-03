@@ -4,21 +4,34 @@ import { View, Text } from "react-native";
 import HomeScreen from "./HomeScreen";
 import ScannerScreen from "./ScannerScreen";
 import DeliveredScreen from "./DeliveredScreen";
+import LoginScreen from "./LoginScreen";
+import { PackageInfo } from "../models/data.model";
 
 export type MainStackNavigatorParamList = {
-  Home: undefined;
-  Scanner: undefined;
-  Deliver: undefined;
+	Login: undefined;
+	Home: undefined;
+	Scanner: {
+		onBack: () => void;
+	};
+	Deliver: {
+		failed: boolean;
+		data: PackageInfo[];
+	};
 };
 
 const Stack = createStackNavigator<MainStackNavigatorParamList>();
 
-export default function MainStackNavigator() {
-  return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Scanner" component={ScannerScreen} />
-      <Stack.Screen name="Deliver" component={DeliveredScreen} />
-    </Stack.Navigator>
-  );
+export default function MainStackNavigator({
+	initialRouteName,
+}: {
+	initialRouteName: "Login" | "Home";
+}) {
+	return (
+		<Stack.Navigator initialRouteName={initialRouteName ?? "Login"}>
+			<Stack.Screen name="Login" component={LoginScreen} />
+			<Stack.Screen name="Home" component={HomeScreen} />
+			<Stack.Screen name="Scanner" component={ScannerScreen} />
+			<Stack.Screen name="Deliver" component={DeliveredScreen} />
+		</Stack.Navigator>
+	);
 }

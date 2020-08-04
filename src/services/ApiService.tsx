@@ -29,6 +29,6 @@ export default class ApiService {
 	}
 
 	public PostPackageDeliveryAsync(data: PackageDeliveredRequest) {
-		return this.http.postAsync<PackageInfo>(`Packages/Delivered`, data);
+		return this.http.postAsync<boolean>(`Packages/Delivered`, data);
 	}
 }

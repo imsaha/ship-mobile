@@ -60,7 +60,6 @@ export class HttpService {
 	public async postAsync<T>(url: string, data?: any) {
 		try {
 			const response = await this.axiosClient.post<T>(url, data);
-
 			if (response.status !== 200) {
 				throw {
 					status: response.status,

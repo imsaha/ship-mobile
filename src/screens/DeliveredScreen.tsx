@@ -63,12 +63,7 @@ export default class DeliveredScreen extends React.Component<
 		this.setState({ processing: true });
 		try {
 			const response = await this.api.PostPackageDeliveryAsync(this.state.data);
-			// if (response) {
-			// 	await AsyncStorage.setItem("token", response.token);
-			// 	await AsyncStorage.setItem("expiry", response.expiry?.toString());
-			// 	await AsyncStorage.setItem("name", response.name);
-			// 	this.props.navigation.replace("Home");
-			// }
+			this.props.navigation.navigate("Home");
 		} catch (error) {
 			Alert.alert(error?.message ?? "Something went wrong.");
 		} finally {
